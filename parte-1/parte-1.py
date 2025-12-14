@@ -1,6 +1,5 @@
-import sys, subprocess, tempfile, re
+import sys
 from pathlib import Path
-
 from constraint import *
 
 USO = "Uso correcto: python parte-1.py <entrada.in> <salida.out>"
@@ -103,15 +102,14 @@ def main():
             if simbolo not in validos:
                 print(f"Error: símbolo inválido '{simbolo}' en fila {num_fila}, col {num_columna}", file=sys.stderr)
                 sys.exit(3)
-            #para luego mostrar por pantalla el tablero inicial y que en vez de . sea espacio en blanco
+            #cambiamos "." por " " para luego mostrar por pantalla en el tablero inicial como se especifica 
             if simbolo == ".":
                     simbolo = " "
             #guardamos el tablero inicial
             tablero_inicial[f"X_{num_fila}_{num_columna}"] = simbolo
         
     
-    #una vez se verifica que los valores del .in son correctos,
-    #creamos el problema
+    #una vez se verifica que los valores del .in son correctos, creamos el problema
     problem = Problem()
 
     #definimos variables, nº variables = nxn y su dominio depende del valor almacenado en cada linea
@@ -123,7 +121,7 @@ def main():
             #si ya tiene valor O, únicamente va a poder tomar valor O
             elif simbolo == "O":
                 dominio = ["O"]
-            #si no tiene X/O por lo que tiene ".", puede tomar valor X ó O
+            #si no tiene X/O, puede tomar valor X ó O
             else:
                 dominio = ["X", "O"]
             #añadimos la variable con su dominio correspondiente
@@ -169,11 +167,12 @@ def main():
         solucion = problem.getSolution()
         mostrarTablero(n, solucion)
 
-        #4. guardamos en el archivo de salida .out todas las soluciones encontradas
-        #abrimos el archivo de salida para escribir en el
-        with ruta_out.open("w", encoding="utf-8") as salida:
-            for sol in soluciones:
-                escribirTablero(salida, n, sol)
+    #4. guardamos en el archivo de salida .out todas las soluciones encontradas
+    #si no hay soluciones, este resultará vacío
+    with ruta_out.open("w", encoding="utf-8") as salida:
+        for sol in soluciones:
+            escribirTablero(salida, n, sol)
+    print("\n No hay soluciones.")
     #escribir al porfe y preguntar
 
 if __name__ == "__main__":

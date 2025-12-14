@@ -161,18 +161,20 @@ def main():
     #2. nº de soluciones encontradas
     soluciones = problem.getSolutions()
     print ("{0} soluciones encontradas".format (len (soluciones)))
+    
     #si hay soluciones entonces: 
-    if len(soluciones) != 0:
+    if soluciones:
         #3. imprimimos una de las soluciones encontradas
-        solucion = problem.getSolution()
-        mostrarTablero(n, solucion)
+        mostrarTablero(n, soluciones[0])
+    else:
+        print("\nNo hay soluciones.")
 
     #4. guardamos en el archivo de salida .out todas las soluciones encontradas
-    #si no hay soluciones, este resultará vacío
+    #si no hay soluciones, solo quedará el tablero inicial
     with ruta_out.open("w", encoding="utf-8") as salida:
+        escribirTablero(salida, n, tablero_inicial)
         for sol in soluciones:
             escribirTablero(salida, n, sol)
-    print("\n No hay soluciones.")
     #escribir al porfe y preguntar
 
 if __name__ == "__main__":

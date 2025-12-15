@@ -1,11 +1,22 @@
-class Algoritmo ():
-    def __init__ (self, grafo, coordenadas):
-        self.grafo = grafo
-        self.coordenadas = coordenadas or {}
+class Algoritmo:
+    def __init__ (self, grafo):
+        self.grafo = grafo 
 
     #implementamos el algoritmo A*
     def aEstrella(self, vertice_1, vertice_2, heuristica):
+        abierta = self.abierta
+        cerrada = []
+        exito = False
+        while len(abierta) != 0 or exit == False:
+            nodo = abierta.pop(0) #quitamos el primer nodo de abierta
+            cerrada.append(nodo) #metemos este nodo en la lista de nodos cerrados
+            if nodo == vertice_2:
+                exito = True
+            else:
+                nodo = abierta.pop()
+
         
+
         return camino, coste, expansiones
 
     #funcion heurísitca 0, h() = 0. Dijkstra

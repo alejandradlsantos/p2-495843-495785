@@ -50,7 +50,7 @@ def escribirTablero(salida, n, tablero):
 
 #funcion principal
 def main():
-    #verifica los argumentos
+    #verifica el nº de argumentos
     if len(sys.argv) != 3:
         print(USO, file=sys.stderr)
         sys.exit(1)

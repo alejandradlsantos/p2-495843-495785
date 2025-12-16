@@ -30,7 +30,7 @@ def main():
         vertice_1 = int(sys.argv[1])
         vertice_2 = int(sys.argv[2])
     except ValueError:
-        print("Error: vértice-1 y vértice-2 deben ser números enteros", fyle=sys.stderr)
+        print("Error: vértice-1 y vértice-2 deben ser números enteros", file=sys.stderr)
         sys.exit(1)
 
     #guarda la ruta de salida como path
@@ -38,6 +38,7 @@ def main():
 
     grafo = Grafo(ruta_gr, ruta_co)
     algoritmo = Algoritmo(grafo)
+
     camino, coste, expansiones = algoritmo.dijkstra(vertice_1, vertice_2)
 
 

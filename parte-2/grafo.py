@@ -13,6 +13,7 @@ class Grafo:
         with ruta_gr.open("r", encoding="utf-8") as fichero:
             for linea in fichero: #lee cada linea del fichero
                 linea = linea.strip() #eliminamos espacios en blanco al inicio y al final
+                
                 #ignoramos cualquier linea vacía o que no empiece por "a"
                 if linea.startswith("a"):
                     arco = linea.split() #arco = ['a', vertice-1, vertice-2, coste]

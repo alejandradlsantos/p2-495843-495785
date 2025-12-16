@@ -1,4 +1,4 @@
-
+#esta clase contiene los nodos pendientes de ser expandidos
 #func_evaluacion (f): funcion de evaluacion, f (n) = g(n) + h(n) (funcion de ordenacion de nodos) 
 
 class Abierta:
@@ -9,7 +9,8 @@ class Abierta:
     def agregarVertice(self, vertice, func_evaluacion):
         self.vertices_pendientes.append((vertice, func_evaluacion))
 
-    #devuelve el vertice con mejor funcion de evaluacion
+    # ordena la lista de forma ascendente según el valor de la funcion de evaluacion
+    # y devuelve el vertice con mejor funcion de evaluacion (el primero)
     def sacarMejor(self):
         mejor_indice = 0 #comenzamos por el primer vertice de la lista, indice = 0
         for indice in range(1, len(self.vertices_pendientes)): #recorremos la lista de uno en uno 

@@ -20,6 +20,10 @@ class Algoritmo:
         evaluacion_inicial = 0 + heuristica(vertice_1, vertice_2)
         lista_abierta.agregarVertice(vertice_1, evaluacion_inicial)
 
+        #variables para contar el número de nodos y arcos procesados
+        n_procesados = 1 #inicializamos a 1 porque ya tiene en la lsita vertice-1
+        arcos_procesados = 0 #en el vertice uno, todavía no se han mirado vecinos
+        
         while not lista_abierta.estaVacia():
             #sacamos vertice con mejor funcion de evaluacion
             vertice = lista_abierta.sacarMejor()
@@ -37,6 +41,7 @@ class Algoritmo:
 
             #sino, generamos sucesores del vertice actual
             for vecino, coste_arco in self.grafo.vecinosVertice(vertice):
+                arcos_procesados += 1 #cada vecino que miramos es un arco procesado
                 #si ya esta en la lista cerrada, no se reexpande
                 if lista_cerrada.contiene(vecino):
                     continue
@@ -52,6 +57,7 @@ class Algoritmo:
                     #calculamos la funcion de evaluacion otra vez
                     evaluacion_vecino = nueva_func_coste + heuristica(vecino, vertice_2)
                     lista_abierta.agregarVertice(vecino, evaluacion_vecino)
+                    n_procesados += 1 #sumamos contador de vertices insertados pendientes
 
         expansiones = lista_cerrada.contarVerticesExpandidos()
         
@@ -67,7 +73,7 @@ class Algoritmo:
             actual = padre[actual]
         camino.reverse()
 
-        return camino, lista_costes[vertice_2], expansiones
+        return camino, lista_costes[vertice_2], expansiones, n_procesados, arcos_procesados
 
 
     #funcion heurísitca 0, dijkstra

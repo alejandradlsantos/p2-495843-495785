@@ -89,14 +89,14 @@ def main():
     algoritmo = Algoritmo(grafo)
 
     t_inicial = time.perf_counter() #medimos tiempo inicial
-    camino, coste, expansiones, n_procesados, arcos_procesados = algoritmo.aEstrella_h1(vertice_1, vertice_2)
+    camino, coste, expansiones = algoritmo.dijkstra(vertice_1, vertice_2)
     t_final = time.perf_counter() #medimos tiempo final
 
     tiempo = t_final - t_inicial #calculamos el tiempo de ejecucion
 
     # imrpime por pantalla:
-    print(f"# vertices: {n_procesados}") #nº de vertices procesados
-    print(f"# arcos : {arcos_procesados}") #nº de arcos procesados
+    print(f"# vertices: {grafo.num_vertices}") #nº de vertices procesados
+    print(f"# arcos : {grafo.num_arcos}") #nº de arcos procesados
 
     #si camino esta vacio entonces no se ha encontrado solucion
     if camino is None:
@@ -124,14 +124,3 @@ def main():
 if __name__ == "__main__":
     main()
    
-"""
-Hay que imprimir por pantalla:
-# numero de vertices PROCESADOS
-# numero de arcos PROCESADOS
-Coste de la solucion óptima encontrada
-Tiempo de ejecucion
-# numero de nodos EXPANDIDOS
-
-En el fichero de salida: 
-<vertice_1> -<coste para ir de vertice_1 al siguiente>- <vertice_i> -...- <vertice_2>
-"""

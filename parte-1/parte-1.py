@@ -5,18 +5,14 @@ from constraint import *
 USO = "Uso correcto: python parte-1.py <entrada.in> <salida.out>"
 
 # Funciones creadas para el cumplimiento de las restricciones
-#Restricción 1 y 2: conteo de X y O en cada fila y columna
+#Restricción 1 y 2: conteo de X en cada fila y columna, nº de X tiene que coincidir con nº O. Por lo que:
+#la mitad de los valores de la lista deben ser X (lo que significa que la otra mitad son O)
 def contador_X_O(*valores):
     conteo_x = 0
     for valor in valores:
         if valor == "X": conteo_x += 1
-    return conteo_x * 2 == len(valores)   # equivale a X == O si solo hay X/O
+    return conteo_x * 2 == len(valores)   # equivale a X == O
 
-""" 
-ver que hacer si lo de arriba o:
-def conteoFila(*vals):
-    return vals.count("X") == vals.count("O")
-"""
 #Restricción 3 y 4: no deben haber tres simbolos iguales consecutivos en fila/columna
 def consecutivos(*valores):
     for posicion in range(len(valores) - 2):
@@ -71,7 +67,7 @@ def main():
         for linea in fichero: # cada linea del fichero
             valor = linea.strip() # eliminar espacios en blanco al inicio y final
             #cada linea no vacia la guardamos
-            if valor: # si la linea no esta vacia --> la guardamos
+            if valor:
                 lineas.append(valor)
     #verificamos nº de filas y el nº de columnas
     n = len(lineas)
@@ -81,7 +77,7 @@ def main():
         print("Error: el tablero está vacío", file=sys.stderr)
         sys.exit(3)
 
-    #para la resolución del problema n tiene que ser par
+    #para la resolución del problema n tiene que ser par (un cuadrado)
     if (n % 2) != 0:
         print("Error: n debe ser un valor par", file=sys.stderr)
         sys.exit(3)
@@ -127,16 +123,16 @@ def main():
             #añadimos la variable con su dominio correspondiente
             problem.addVariable(f"X_{num_fila}_{num_columna}", dominio)
     """
-    #habiendo definido el dominio para las variables ya cumplimos con la 
-    #primera restricción en donde no puede quedar ninguna posicion vacia
-    #puesto que los valores que pueden tomar son X ó O segun estos mismos
+    habiendo definido el dominio para las variables ya cumplimos con la 
+    restricción en donde no puede quedar ninguna posicion vacia
+    puesto que los valores que pueden tomar son X ó O segun estos mismos
     """
     #una vez definimos los dominios aplicamos las restricciones
     #Restricciones para las filas: 
     for num_fila in range(n): 
         #construimos la lista de variables de la fila 
         valores_fila = [f"X_{num_fila}_{num_columna}" for num_columna in range(n)]
-        #Restricción 1. mismo número de X y O por fila
+        #Restricción 1: mismo número de X y O por fila
         problem.addConstraint(contador_X_O, valores_fila)
         #Restricción 3: No pueden haber tres simbolos iguales consecutivos
         problem.addConstraint(consecutivos, valores_fila)
@@ -150,12 +146,13 @@ def main():
         #Restricción 4: No pueden haber tres simbolos iguales consecutivos
         problem.addConstraint(consecutivos, valores_columna)
 
+    """
+    por ultimo, soluciones
+    por pantalla imprime: 1. Tablero vacío, 2. nº de soluciones encontradas y 3. Una solucion encontrada
+    Luego, en el fichero de salida .out se guardan las soluciones encontradas
+    """
 
-    #por ultimo, soluciones
-    #por pantalla imprime: 1. Tablero vacío, 2. nº de soluciones encontradas y 3. Una solucion encontrada
-    #Luego, en el fichero de salida .out se guardan todas las soluciones encontradas
-
-    #1. mostramos el tablero vacío, el inicial del .in
+    #1. mostramos el tablero inicial del .in
     mostrarTablero(n, tablero_inicial)
 
     #2. nº de soluciones encontradas
@@ -169,13 +166,12 @@ def main():
     else:
         print("\nNo hay soluciones.")
 
-    #4. guardamos en el archivo de salida .out todas las soluciones encontradas
+    #4. guardamos en el archivo de salida .out las soluciones encontradas
     #si no hay soluciones, solo quedará el tablero inicial
     with ruta_out.open("w", encoding="utf-8") as salida:
         escribirTablero(salida, n, tablero_inicial)
         for sol in soluciones:
             escribirTablero(salida, n, sol)
-    #escribir al porfe y preguntar
 
 if __name__ == "__main__":
     main()

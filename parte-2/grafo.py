@@ -1,8 +1,11 @@
+
+# lee los contenidos de un grafo y los representa en memoria.
+from pathlib import Path
 class Grafo:
-    def __init__(self, ruta_gr, ruta_co):
+    def __init__(self, ruta_gr: Path, ruta_co: Path):
         #inicializamos los diccionarios
         self.vecinos = {} #guarda todos los vertices vecinos de cada vertice y sus costes. (key : vertice, value :  lista de (vertice_vecino, coste))
-        self.coordenadas = {} #guarda las coordenadas de cada vertices
+        self.coordenadas = {} #guarda las coordenadas de cada vertice
         
         #variables para contar el número de nodos y arcos procesados de los ficheros
         self.num_vertices = 0
@@ -14,7 +17,7 @@ class Grafo:
         #una vez hecho esto, el grafo está listo
     
     #lee el archivo mapa.gr y actualiza el diccionario vecinos
-    def cargarGr(self, ruta_gr):
+    def cargarGr(self, ruta_gr: Path):
         with ruta_gr.open("r", encoding="utf-8") as fichero:
             for linea in fichero: #lee cada linea del fichero
                 linea = linea.strip() #eliminamos espacios en blanco al inicio y al final
@@ -45,7 +48,7 @@ class Grafo:
 
     #lee el archivo mapa.co y actualiza el diccionario coordenadas
     #seguimos la misma implementación que en leerGr, se comentarán unicamente las diferencias
-    def cargarCo(self, ruta_co):
+    def cargarCo(self, ruta_co: Path):
         with ruta_co.open("r", encoding="utf-8") as fichero:
             for linea in fichero:
                 linea = linea.strip()
@@ -71,10 +74,10 @@ class Grafo:
     
     #devolmemos la lista de vecinos del vertice
     #si no existe devuelve lista vacia []
-    def vecinosVertice(self, vertice):
+    def vecinosVertice(self, vertice: int):
         return self.vecinos.get(vertice, [])
 
     #devolvemos las coordenadas del vertice indicado
-    def coordenadasVertice(self, vertice):
+    def coordenadasVertice(self, vertice:int):
         return self.coordenadas.get(vertice)
     

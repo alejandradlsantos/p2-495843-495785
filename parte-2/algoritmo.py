@@ -3,21 +3,22 @@ from abierta import Abierta
 from cerrada import Cerrada
 
 class Algoritmo:
-    def __init__ (self, grafo):
+    def __init__ (self, grafo: Grafo):
         self.grafo = grafo 
 
     #implementamos el algoritmo A*
-    def aEstrella(self, vertice_1, vertice_2, heuristica):
-        #inicializamos la lista abierta (vertices a procesar)y cerrada (vertices expandidos)
+    def aEstrella(self, vertice_1: int, vertice_2: int, heuristica: function):
+        #inicializamos la lista abierta (vertices pendientes)y cerrada (vertices expandidos)
         lista_abierta = Abierta() #lista de nodos pendientes
         lista_cerrada = Cerrada() #lista de nodos expandidos
         
         #A* se basa en: funcion de evaluacion (f) = funcion de coste (g) + funcion heurísitca (h)
-        lista_costes = {vertice_1: 0} #diccionario que guarda la funcion de coste de cada vertice
-        padre = {vertice_1: None} #puntero al nodo anterior en el mejor camino conocido
+        lista_costes = {vertice_1: 0} #diccionario que guarda la funcion de coste de cada vertice, el primer vértice tiene coste 0
+        padre = {vertice_1: None} #puntero al nodo anterior en el mejor camino conocido, el primer vertice no tiene padre
 
-        #metemos el nodo inicial en la lista abierta 
-        evaluacion_inicial = 0 + heuristica(vertice_1, vertice_2)
+        #metemos el nodo inicial en la lista abierta con su evaluacion
+        # ev_incial = funcion de coste (0 porque es el priemero) + funcion heuristica (resultado de implementacion de la funcion pasada por parametro)
+        evaluacion_inicial = 0 + heuristica(vertice_1, vertice_2) 
         lista_abierta.agregarVertice(vertice_1, evaluacion_inicial)
         
         while not lista_abierta.estaVacia():
@@ -49,11 +50,12 @@ class Algoritmo:
                     lista_costes[vecino] = nueva_func_coste
                     padre[vecino] = vertice
 
-                    #calculamos la funcion de evaluacion otra vez
+                    #calculamos la funcion de evaluacion otra vez 
                     evaluacion_vecino = nueva_func_coste + heuristica(vecino, vertice_2)
                     lista_abierta.agregarVertice(vecino, evaluacion_vecino)
 
-        expansiones = lista_cerrada.contarVerticesExpandidos()
+        #contamos el numero de vertices en la lista cerrada resultante del proceso anterior, son todos los nodos expandidos hasta llegar al vertice destino
+        expansiones = lista_cerrada.contarVerticesExpandidos() 
         
         #si el bucle termina y el vertice_2 no es´ta en la lista de costes, no se ha encontrado camino
         if vertice_2 not in lista_costes:
@@ -78,20 +80,20 @@ class Algoritmo:
     #funcion heurísitca 1, distancia euclídea.
     def aEstrella_h1(self, vertice_1, vertice_2):
         return self.aEstrella(vertice_1, vertice_2, self.h1)
-    
-    """ 
-    #funcion heurísitca 2, distania euclídea con factor k para escalar la distancia euclidea. 
-    def aEstrella_h2(self, vertice_1, vertice_2, k):
-        return self.aEstrella(vertice_1, vertice_2, self.h2(vertice_1, vertice_2, k))
- """
+     
+    #funcion heurísitca 2, distania euclídea con factor k para escalar la distancia euclidea de h1. 
+    def aEstrella_h2(self, vertice_1, vertice_2):
+        return self.aEstrella(vertice_1, vertice_2, self.h2(vertice_1, vertice_2))
+
+
 #implementamos las fórmulas para las heurísticas h0, h1 y h2
     
     #dijkstra establece la funcon heurística = 0. 
-    def h0(self, vertice_1, vertice_2):
+    def h0(self, vertice_1: int, vertice_2: int):
         return 0 
     
     #calculamos la distancia euclidea
-    def h1(self, vertice_1, vertice_2):
+    def h1(self, vertice_1: int, vertice_2: int):
         lon_1, lat_1 = self.grafo.coordenadasVertice(vertice_1)
         lon_2, lat_2 = self.grafo.coordenadasVertice(vertice_2)
 
@@ -101,5 +103,5 @@ class Algoritmo:
         return (distancia_x*distancia_x + distancia_y*distancia_y)
     
     #multiplicamos la distancia euclidea por un factor k
-    def h2(self, vertice_1, vertice_2, k):
-        return k * self.h1(vertice_1, vertice_2)
+    def h2(self, vertice_1: int, vertice_2: int):
+        return 0.05 * self.h1(vertice_1, vertice_2)

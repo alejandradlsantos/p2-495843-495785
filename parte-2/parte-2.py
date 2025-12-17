@@ -8,43 +8,43 @@ USO = "Uso correcto: python parte-2.py <vertice-1> <vertice-2> <nombre-del-mapa>
 
 #las siguientes funciones servrian para escribir en el fichero de salida con el formato deseado
 
-def coste_arco(grafo: Grafo, u: int, v: int):
-    for w, c in grafo.vecinosVertice(u):
-        if w == v:
-            return c
-    raise ValueError(f"No existe arco {u}->{v}")
+#devuelve el coste de ir de un vertice a otro
+def costeArco(grafo: Grafo, vertice_1: int, vertice_2: int):
+    for vertice, coste in grafo.vecinosVertice(vertice_1):
+        if vertice == vertice_2:
+            return coste
+    raise ValueError(f"No existe arco {vertice_1}->{vertice_2}")
 
-def escribir_solucion(ruta_salida: Path, camino: list[int], grafo: Grafo):
-    # ejemplo: 1 - (1498) - 308 - (8718) - 309
-    piezas = [str(camino[0])]
-    for i in range(len(camino) - 1):
-        u = camino[i]
-        v = camino[i + 1]
-        c = coste_arco(grafo, u, v)
-        piezas.append(f"- ({c}) - {v}")
-    ruta_salida.write_text(" ".join(piezas) + "\n", encoding="utf-8")
+def escribirSolucion(ruta_salida: Path, camino: list[int], grafo: Grafo):
+    # escibimos por ejemplo: 1 - (1498) - 308 - (8718) - 309, vertices y el coste de ir de un vertice a otro
+    vertices = [str(camino[0])] #obtenemos los vertices del camino obtenido en la resolucion del problema
+    for vertice in range(len(camino) - 1): #por cada vertice buscamos el coste de ir de v1 a v2
+        vertice_1 = camino[vertice]
+        vertice_2 = camino[vertice + 1]
+        coste_v1_v2 = costeArco(grafo, vertice_1, vertice_2)
+        vertices.append(f"- ({coste_v1_v2}) - {vertice_2}")
+    ruta_salida.write_text(" ".join(vertices) + "\n", encoding="utf-8")
 
 #resolvemos las rutas .gr y .co
-def resolver_rutas_mapa(nombre_mapa: str) -> tuple[Path, Path]:
-    base = Path(nombre_mapa)
+def resolverRutas(nombre_mapa: str):
+    ruta_base = Path(nombre_mapa)
 
-    # Si te pasan "algo.gr" o "algo.co", quita esa extensión final
-    if str(base).endswith(".gr"):
-        base = Path(str(base)[:-3])
-    elif str(base).endswith(".co"):
-        base = Path(str(base)[:-3])
+    # Si pasan "algo.gr" o "algo.co", quita esa extensión final
+    if str(ruta_base).endswith(".gr"):
+        ruta_base = Path(str(ruta_base)[:-3])
+    elif str(ruta_base).endswith(".co"):
+        ruta_base = Path(str(ruta_base)[:-3])
 
-    # Caso 1: te pasan un directorio (como en tu captura)
-    #   USA-road-d.USA/USA-road-d.USA.gr
-    if base.exists() and base.is_dir():
-        gr = base / (base.name + ".gr")
-        co = base / (base.name + ".co")
+    # USA-road-d.USA/USA-road-d.USA.gr
+    if ruta_base.exists() and ruta_base.is_dir():
+        gr = ruta_base / (ruta_base.name + ".gr")
+        co = ruta_base / (ruta_base.name + ".co")
         return gr, co
 
-    # Caso 2: te pasan el nombre base (USA-road-d.USA)
+    # Por ejemplo pasan el nombre base (USA-road-d.USA)
     # y los ficheros están en el mismo directorio actual
-    gr = Path(str(base) + ".gr")
-    co = Path(str(base) + ".co")
+    gr = Path(str(ruta_base) + ".gr")
+    co = Path(str(ruta_base) + ".co")
     return gr, co
 
 
@@ -56,7 +56,7 @@ def main():
         sys.exit(1)
 
     #verifica que existe ruta .gr y .co para el nombre del mapa especificado
-    ruta_gr, ruta_co = resolver_rutas_mapa(sys.argv[3])
+    ruta_gr, ruta_co = resolverRutas(sys.argv[3])
 
 
     #verificar que existe el fichero .gr
@@ -79,6 +79,7 @@ def main():
     #guarda la ruta de salida como path
     salida = Path(sys.argv[4])
 
+    #inicializamos el grafo. la clase Grafo lee los archivos gr y co, guarda los vectores y sus vecinos y las coordenadas de cada vectos
     grafo = Grafo(ruta_gr, ruta_co)
 
     # validar que existen como claves 
@@ -86,10 +87,10 @@ def main():
         print("Error: alguno de los vértices no existe en el mapa", file=sys.stderr)
         sys.exit(3)
 
+    #inicializamos el algoritmo
     algoritmo = Algoritmo(grafo)
-
     t_inicial = time.perf_counter() #medimos tiempo inicial
-    camino, coste, expansiones = algoritmo.dijkstra(vertice_1, vertice_2)
+    camino, coste, expansiones = algoritmo.dijkstra(vertice_1, vertice_2) #resolvemos el problema llamando a la heuristica que se usará
     t_final = time.perf_counter() #medimos tiempo final
 
     tiempo = t_final - t_inicial #calculamos el tiempo de ejecucion
@@ -119,7 +120,7 @@ def main():
     print(f"# expansiones : {expansiones} ({nodes_sec:.2f} nodes/sec)")
 
     #escribe en el fichero de salida con el formato pedido
-    escribir_solucion(salida, camino, grafo)
+    escribirSolucion(salida, camino, grafo)
 
 if __name__ == "__main__":
     main()

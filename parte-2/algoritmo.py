@@ -109,4 +109,4 @@ class Algoritmo:
 
     #multiplicamos la distancia euclidea por un factor k
     def h2(self, vertice_1: int, vertice_2: int):
-        return 0.05 * self.h1(vertice_1, vertice_2)
+        return 1.5 * self.h1(vertice_1, vertice_2)

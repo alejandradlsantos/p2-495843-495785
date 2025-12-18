@@ -5,7 +5,7 @@ class Abierta:
     def __init__(self):
         self.vertices_pendientes = []
 
-    #agrega a la lista de vertices pendientes una tupla con: funcion de evaluacion del vertice correspondiente y vertice (f, vertice)
+    #agrega a la lista de vertices pendientes una tupla con: funcion de evaluacion del vertice correspondiente y vertice 
     def agregarVertice(self, vertice: int, func_evaluacion: float):
         self.vertices_pendientes.append((vertice, func_evaluacion))
 

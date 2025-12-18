@@ -90,7 +90,7 @@ def main():
     #inicializamos el algoritmo
     algoritmo = Algoritmo(grafo)
     t_inicial = time.perf_counter() #medimos tiempo inicial
-    camino, coste, expansiones = algoritmo.aEstrella_h0(vertice_1, vertice_2) #resolvemos el problema llamando a la heuristica que se usará
+    camino, coste, expansiones = algoritmo.aEstrella_h2(vertice_1, vertice_2) #resolvemos el problema llamando a la heuristica que se usará
     t_final = time.perf_counter() #medimos tiempo final
 
     tiempo = t_final - t_inicial #calculamos el tiempo de ejecucion

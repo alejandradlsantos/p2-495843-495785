@@ -1,13 +1,14 @@
 from grafo import Grafo
 from abierta import Abierta
 from cerrada import Cerrada
+import math
 
 class Algoritmo:
     def __init__ (self, grafo: Grafo):
         self.grafo = grafo 
 
     #implementamos el algoritmo A*
-    def aEstrella(self, vertice_1: int, vertice_2: int, heuristica: function):
+    def aEstrella(self, vertice_1: int, vertice_2: int, heuristica):
         #inicializamos la lista abierta (vertices pendientes)y cerrada (vertices expandidos)
         lista_abierta = Abierta() #lista de nodos pendientes
         lista_cerrada = Cerrada() #lista de nodos expandidos
@@ -74,7 +75,7 @@ class Algoritmo:
 
     #funcion heurísitca 0, dijkstra
     #en h0 probamos la resolución del algoritmo por fuerza bruta, heuristica "base" para ver mejoras en las demas
-    def dijkstra(self, vertice_1, vertice_2):
+    def aEstrella_h0(self, vertice_1, vertice_2):
         return self.aEstrella(vertice_1, vertice_2, self.h0)
     
     #funcion heurísitca 1, distancia euclídea.
@@ -83,7 +84,7 @@ class Algoritmo:
      
     #funcion heurísitca 2, distania euclídea con factor k para escalar la distancia euclidea de h1. 
     def aEstrella_h2(self, vertice_1, vertice_2):
-        return self.aEstrella(vertice_1, vertice_2, self.h2(vertice_1, vertice_2))
+        return self.aEstrella(vertice_1, vertice_2, self.h2)
 
 
 #implementamos las fórmulas para las heurísticas h0, h1 y h2
@@ -94,14 +95,18 @@ class Algoritmo:
     
     #calculamos la distancia euclidea
     def h1(self, vertice_1: int, vertice_2: int):
-        lon_1, lat_1 = self.grafo.coordenadasVertice(vertice_1)
-        lon_2, lat_2 = self.grafo.coordenadasVertice(vertice_2)
+        coor_1 = self.grafo.coordenadasVertice(vertice_1)
+        coor_2 = self.grafo.coordenadasVertice(vertice_2)
+        if coor_1 is None or coor_2 is None:
+            return 0
 
-        distancia_x = lon_1 - lon_2
-        distancia_y = lat_1 - lat_2
+        lon_1, lat_1 = coor_1
+        lon_2, lat_2 = coor_2
 
-        return (distancia_x*distancia_x + distancia_y*distancia_y)
-    
+        dx = lon_1 - lon_2
+        dy = lat_1 - lat_2
+        return math.sqrt(dx*dx + dy*dy)
+
     #multiplicamos la distancia euclidea por un factor k
     def h2(self, vertice_1: int, vertice_2: int):
         return 0.05 * self.h1(vertice_1, vertice_2)

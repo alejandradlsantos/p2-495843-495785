@@ -90,7 +90,7 @@ def main():
     #inicializamos el algoritmo
     algoritmo = Algoritmo(grafo)
     t_inicial = time.perf_counter() #medimos tiempo inicial
-    camino, coste, expansiones = algoritmo.dijkstra(vertice_1, vertice_2) #resolvemos el problema llamando a la heuristica que se usará
+    camino, coste, expansiones = algoritmo.aEstrella_h0(vertice_1, vertice_2) #resolvemos el problema llamando a la heuristica que se usará
     t_final = time.perf_counter() #medimos tiempo final
 
     tiempo = t_final - t_inicial #calculamos el tiempo de ejecucion
@@ -115,7 +115,7 @@ def main():
         nodes_sec = float("inf")
 
     #tiempo de ejecucion calculado anteriormente
-    print(f"Tiempo de ejecución: {tiempo:.2f} segundos")
+    print(f"Tiempo de ejecución: {tiempo:.4f} segundos")
     #nº de nodos expandidos (nodos en la lista cerrada)
     print(f"# expansiones : {expansiones} ({nodes_sec:.2f} nodes/sec)")
 
